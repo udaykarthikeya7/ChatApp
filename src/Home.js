@@ -14,6 +14,10 @@ export default function Home() {
                 console.log(value.data.user);
                 setUser(value.data.user);
                 setIsLoading(false);
+                // fetch("http://127.0.0.1:5000/data")
+                // .then(data => {return data.json()})
+                // .then(resp => console.log(JSON.stringify(resp)))
+                // .catch(console.log);
             } else {
                 navigate("/login");
             }
@@ -57,13 +61,46 @@ export default function Home() {
             ) :
             (user ? (
             <>
+            <div id='emaillogout'>
             <h1>Welcome {user.email}</h1>
-            <br />
-            <div>
-                <input type='text' placeholder='type message here' />
-                <button type='submit'>submit</button>
+            <button className="buttons" onClick={logout}>Logout</button>
             </div>
-            <button onClick={logout}>Logout</button>
+            <div className="ChatBox">
+              <div className='msgBlock'>
+                <div className='username'>
+                <p>user1</p>
+                </div>
+                <div className="message">
+                  message
+                </div>
+              </div>
+              <div className='msgBlock'>
+                <div className='username'>
+                <p>user1</p>
+                </div>
+                <div className="message">
+                  message
+                </div>
+              </div>
+              <div className='msgBlock'>
+                <div className='username'>
+                <p>user1</p>
+                </div>
+                <div className="message">
+                  message
+                </div>
+              </div>
+              <div className='msgBlock'>
+                <div className='username'>
+                <p>user1</p>
+                <div className="message">
+                  message
+                </div>
+                </div>
+              </div>
+              
+            </div>
+            
             </>) :
             (
                 <>
