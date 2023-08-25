@@ -1,5 +1,10 @@
 
 # Import flask and datetime module for showing date and time
+from dotenv import load_dotenv
+load_dotenv()
+
+import os
+from supabase import create_client, Client
 from flask import Flask, jsonify, request, make_response, render_template, session, redirect
 from flask_socketio import join_room, leave_room, send, SocketIO
 import random
@@ -8,6 +13,16 @@ from string import ascii_uppercase
  
 # x = datetime.datetime.now()
  
+url = os.environ.get("SUPABASE_URL")
+key = os.environ.get("SUPABASE_KEY")
+supabase = create_client(url, key)
+
+# data = supabase.table("chats").select("*").eq("name", "chat21").execute()
+# print(data)
+data = supabase.table("chats").insert({"name":"Chat 2"}).execute()
+data = supabase.table("chats").select("*").execute()
+print(data)
+
 # Initializing flask app
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "topSecret"
