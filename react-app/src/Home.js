@@ -1,11 +1,12 @@
 import { supabase } from './lib/helper/supabaseClient';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 
 export default function Home() {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const message = useRef();
     const navigate = useNavigate();
     useEffect(() => {
       async function getUserData() {
@@ -98,7 +99,14 @@ export default function Home() {
                 </div>
                 </div>
               </div>
-              
+              <div className='msgInput'>
+                <input type="text" ref={message} placeholder="Message..." autoComplete='false' />
+                <button onClick={() => {
+                  console.log(message.current.value);
+                  message.current.value = "";
+                  
+                }}>Send</button>
+              </div>
             </div>
             
             </>) :

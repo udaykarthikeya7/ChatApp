@@ -1,11 +1,21 @@
+:root {
+  --darkbg : #111111;
+  --lightbg : #ffffff;
+
+}
+
+
+
+
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   background-color: #111;
-  color: beige;
+  color: #fff;
 }
 .App {
   height: 100vh;
@@ -79,6 +89,9 @@ body {
   background-color: aquamarine;
   color: black;
   margin-inline-start: 5px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
   padding: 5px;
   border-radius: 5px;
   max-height: 2rem;
@@ -92,6 +105,7 @@ body {
 }
 
 .ChatBox {
+  flex: 1;
   width: calc(100vw - 10px);
   background-color: rgba(0, 0, 0, 0.5);
   min-height: 80vh;
@@ -108,4 +122,20 @@ body {
 
 .msgBlock {
   margin: 5px;
+}
+
+.msgInput {
+  /* margin: 0px 5px; */
+  margin-top: auto;
+  justify-self: flex-end;
+  width: 100%;
+}
+.msgInput input {
+  width: 95%;
+  height: 2rem;
+}
+.msgInput button {
+  width: 5%;
+  height: 2rem;
+
 }
