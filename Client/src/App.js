@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import Home from './Home';
 import Navbar from './Navbar';
+import ChatRoom from './ChatRoom';
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/room" element={<ChatRoom />} />
           <Route exact path="/login" element={<Login />} />
         </Routes>
       {/* {!user ? ( <Login /> ) : (<Home />)} */}

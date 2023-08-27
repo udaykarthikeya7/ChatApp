@@ -19,14 +19,15 @@ supabase = create_client(url, key)
 
 # data = supabase.table("chats").select("*").eq("name", "chat21").execute()
 # print(data)
-data = supabase.table("chats").insert({"name":"Chat 2"}).execute()
+# data = supabase.table("chats").insert({"name":"Chat 2"}).execute()
 data = supabase.table("chats").select("*").execute()
 print(data)
 
 # Initializing flask app
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "topSecret"
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
+
 
 @app.route("/", methods=["POST", "GET"])
 def home():
@@ -40,7 +41,7 @@ def get_time():
         return _build_cors_preflight_response()
     elif request.method == "GET": # The actual request following the preflight
         response = jsonify({"order_id": 123, "status": "shipped"})
-        response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+        response.headers.add("Access-Control-Allow-Origin", "*")
         print(response)
         return response
     else:
@@ -53,7 +54,14 @@ def _build_cors_preflight_response():
     response.headers.add('Access-Control-Allow-Methods', "*")
     return response
 
+@socketio.on("connect")
+def connect(auth):
+    print("socket connected")
+    send({"name": "message", "message": "connected successfully"})
 
+@socketio.on("disconnect")
+def disconnect():
+    print("socket disconnected")
 # Running app
 if __name__ == '__main__':
     socketio.run(app, debug=True)

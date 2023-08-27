@@ -5,7 +5,7 @@ function Navbar({ user }) {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <span>Chat App</span>
+        <span><h3>Chat App</h3></span>
         {/* <button className="theme-toggle" onClick={handleThemeToggle}>
           {isDarkTheme ? '🌞' : '🌙'}
         </button> */}
