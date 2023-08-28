@@ -9,19 +9,19 @@ import ChatRoom from './ChatRoom';
 function App() {
 
   return (
+      <Router>
       <div className='App'>
       <Navbar />
       <div className='contentBox'>
-      <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/room" element={<ChatRoom />} />
+          <Route path="/room/:id/:username" element={<ChatRoom />} />
           <Route exact path="/login" element={<Login />} />
         </Routes>
       {/* {!user ? ( <Login /> ) : (<Home />)} */}
+      </div>
+      </div>
       </Router>
-      </div>
-      </div>
   )
 }
 

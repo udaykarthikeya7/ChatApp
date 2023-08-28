@@ -4,9 +4,6 @@
 
 }
 
-
-
-
 * {
   margin: 0;
   padding: 0;
@@ -110,8 +107,8 @@ body {
   flex: 1;
   width: calc(100vw - 10px);
   background-color: rgba(0, 0, 0, 0.5);
-  min-height: 80vh;
-  overflow-y: auto;
+  height: 80vh;
+  overflow-y: none;
   /* border: solid 2.5px rgb(71, 123, 197,0.5); */
   border: solid 2.5px #007bff;
   border-radius: 5px;
@@ -120,6 +117,14 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+}
+
+.messagesBox{
+  width: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+
 }
 
 .msgBlock {
@@ -131,11 +136,12 @@ body {
   margin-top: auto;
   justify-self: flex-end;
   width: 100%;
-  padding: 5px 10px;
+  padding: 5px;
 }
 .msgInput input {
   width: 95%;
   height: 2rem;
+  padding-inline: 3px;
 }
 .msgInput button {
   width: 5%;
@@ -176,4 +182,12 @@ body {
     border-radius: 5px;
     height: 2rem;
     width: 7rem;
+}
+
+.messagesBlock{
+  overflow-y: auto;
+}
+
+#Logo{
+  color: #fff;
 }

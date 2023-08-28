@@ -1,11 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 
-function Navbar({ user }) {
+
+function Navbar() {
 
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <span><h3>Chat App</h3></span>
+      <Link to="/" style={{ textDecoration: 'none' }}>
+        <span><h3 id="Logo">Chat App</h3></span>
+         </Link>
         {/* <button className="theme-toggle" onClick={handleThemeToggle}>
           {isDarkTheme ? '🌞' : '🌙'}
         </button> */}

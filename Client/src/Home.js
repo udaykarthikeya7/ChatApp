@@ -47,6 +47,14 @@ export default function Home() {
        console.log(`connect_error due to ${err.message}`);
        alert('unable to connect to the server,\ntry checking your internet connection and reloading the page.');
       });
+      socketRef.current.on("createStatus", (msg) => {
+        if (msg["success"] === true) {
+          console.log(msg["roomCode"]);
+          navigate(`/room/${msg["roomCode"]}/${msg["name"]}`);
+        } else {
+          setError("Error: reload the page and try again");
+        }
+      })
       socketRef.current.on("message", (data) => {
         console.log(data);
         setRooms(data["rooms"]);
@@ -83,7 +91,7 @@ export default function Home() {
     });
 
     return () => {
-      // socketRef.current.disconnect();
+      socketRef.current.disconnect();
       authListener.subscription.unsubscribe();
     }
   }, [navigate]);
@@ -98,9 +106,8 @@ export default function Home() {
   };
   const submit = (e) => {
     e.preventDefault();
-    alert(nameRef.current.value, roomRef.current.value);
     if (!createRoom) {
-      socketRef.current.emit("join", {"name": nameRef.current.value, code: roomRef.current.value});
+      socketRef.current.emit("join", {"name": nameRef.current.value, "code": roomRef.current.value});
     } else {
       socketRef.current.emit("create", {"name": nameRef.current.value});
     }
@@ -166,7 +173,7 @@ export default function Home() {
             </div>
             <div className='roomsBox'>
                 {rooms && rooms.map((room,i) => {
-                  <pre key={i}>room.name</pre>
+                  return (<pre key={i}>{room.name}</pre>)
                 })}
             </div>
           </>) :

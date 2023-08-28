@@ -6,22 +6,39 @@ load_dotenv()
 import os
 from supabase import create_client, Client
 from flask import Flask, jsonify, request, make_response, render_template, session, redirect
-from flask_socketio import join_room, leave_room, send, SocketIO
+from flask_socketio import join_room, leave_room, send, emit, SocketIO
 import random
 from string import ascii_uppercase
 # import datetime
  
 # x = datetime.datetime.now()
+
  
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
 supabase = create_client(url, key)
 
+rooms = supabase.table("Rooms").select("roomCode").execute()
+
 # data = supabase.table("chats").select("*").eq("name", "chat21").execute()
 # print(data)
 # data = supabase.table("chats").insert({"name":"Chat 2"}).execute()
-data = supabase.table("chats").select("*").execute()
-print(data)
+# data = supabase.table("chats").select("*").execute()
+# print(data)
+
+def generate_unique_code(length):
+    while True:
+        code = ""
+        for _ in range(length):
+            code += random.choice(ascii_uppercase)
+        
+        if code not in rooms:
+            break
+    
+    return code
+
+def encrypt(data):
+    return data
 
 # Initializing flask app
 app = Flask(__name__)
@@ -62,6 +79,49 @@ def connect(auth):
 @socketio.on("disconnect")
 def disconnect():
     print("socket disconnected")
+
+@socketio.on("create")
+def createTable(msg):
+    room = generate_unique_code(4)
+    supabase.table("Rooms").insert({"roomCode": room, "members": [{"name": msg["name"]}]}).execute()
+    supabase.table("Chats").insert({"roomId": room}).execute()
+    emit("createStatus",{"success": True, "roomCode": room, "name": msg["name"]})
+
+@socketio.on("join")
+def createTable(msg):
+    room = msg["code"]
+    data, count = supabase.table("Rooms").select("members").eq("roomCode", room).execute()
+    # print(data[1][0]["members"])
+    supabase.table("Rooms").update({"members": [*data[1][0]["members"],{"name": msg["name"]}]}).eq("roomCode", room).execute()
+    emit("createStatus",{"success": True, "roomCode": room, "name": msg["name"]})
+
+
+@socketio.on("loadmsgs")
+def sendmsgs(id):
+    data, count = supabase.table("Chats").select("messages").eq("roomId", id).execute()
+    if (data[1] != [] or data[1][0] != []):
+        emit("msgs", data[1][0]["messages"])
+    else :
+        emit("msgs", [])
+    join_room(id)
+
+@socketio.on("sendmsg")
+def sendmsgs(msg):
+    data, count = supabase.table("Chats").select("messages").eq("roomId", msg["id"]).execute()
+    if (hasattr(data[1][0]["messages"], '__iter__') == True):
+        supabase.table("Chats").update({"messages": [*data[1][0]["messages"],{
+        "name": msg["name"],
+        "time": msg["time"],
+        "message": msg["message"]
+        }]}).eq("roomId", msg["id"]).execute()
+    else:
+        supabase.table("Chats").update({"messages": [{
+        "name": msg["name"],
+        "time": msg["time"],
+        "message": msg["message"]
+        }]}).eq("roomId", msg["id"]).execute()
+    emit("newmsg", encrypt(msg), room=msg["id"])
+
 # Running app
 if __name__ == '__main__':
     socketio.run(app, debug=True)
